@@ -10,7 +10,7 @@ const testIds = {
   article: "article",
 };
 
-const ARTICLES = [
+const articles = [
   {
     title: "Alphabet earnings",
     upvotes: 22,
@@ -48,7 +48,7 @@ const ARTICLES = [
   },
 ];
 
-const mostUpvotedArticles = ARTICLES.concat().sort((a, b) => {
+const mostUpvotedArticles = articles.concat().sort((a, b) => {
   if (a.upvotes > b.upvotes) {
     return -1;
   }
@@ -58,7 +58,7 @@ const mostUpvotedArticles = ARTICLES.concat().sort((a, b) => {
   return 0;
 });
 
-const mostRecentArticles = ARTICLES.concat().sort((a, b) => {
+const mostRecentArticles = articles.concat().sort((a, b) => {
   const aDate = new Date(a.date);
   const bDate = new Date(b.date);
   if (aDate > bDate) {
@@ -70,7 +70,7 @@ const mostRecentArticles = ARTICLES.concat().sort((a, b) => {
   return 0;
 });
 
-const renderApp = () => render(<App articles={ARTICLES} />);
+const renderApp = () => render(<App articles={articles} />);
 
 beforeEach(() => {
 });
@@ -86,7 +86,6 @@ const expectArticles = (articles, expectedArticles) => {
     const upvotes = within(article).getByTestId("article-upvotes").textContent;
     const date = within(article).getByTestId("article-date").textContent;
     const expectedArticle = expectedArticles[i];
-
     expect([title, upvotes, date]).toEqual([expectedArticle.title, expectedArticle.upvotes.toString(), expectedArticle.date]);
   });
 };
@@ -95,12 +94,12 @@ test('Initial articles render correctly', () => {
   const { getByTestId, queryAllByTestId } = renderApp();
 
   const articles = queryAllByTestId(testIds.article);
-  expectArticles(articles, ARTICLES);
+  expectArticles(articles, mostUpvotedArticles);
 });
 
 test('Clicking on top renders expected articles', () => {
   const { getByTestId, queryAllByTestId } = renderApp();
-  
+
   const mostUpvotedLink = getByTestId(testIds.mostUpvotedLink);
   fireEvent.click(mostUpvotedLink);
 
@@ -110,7 +109,7 @@ test('Clicking on top renders expected articles', () => {
 
 test('Clicking on newest renders expected articles', () => {
   const { getByTestId, queryAllByTestId } = renderApp();
-  
+
   const mostRecentLink = getByTestId(testIds.mostRecentLink);
   fireEvent.click(mostRecentLink);
 
@@ -121,7 +120,7 @@ test('Clicking on newest renders expected articles', () => {
 
 test('Sequence of navigation clicks renders expected artices', () => {
   const { getByTestId, queryAllByTestId } = renderApp();
-  
+
   const mostUpvotedLink = getByTestId(testIds.mostUpvotedLink);
   const mostRecentLink = getByTestId(testIds.mostRecentLink);
 
